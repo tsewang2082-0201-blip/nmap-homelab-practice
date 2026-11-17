@@ -11,7 +11,6 @@ Personal practice log from setting up a home lab and working through the recon-t
 ## What's in here
 
 - `reports/` - write-ups from each practice session: what I ran, what I found, what I learned
-- `linkedin-post.md` - draft of a post about this project
 
 ## Progress
 
