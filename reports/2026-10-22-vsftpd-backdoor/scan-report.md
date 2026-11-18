@@ -60,7 +60,30 @@ Went back to Wireshark to watch the FTP control channel during the exploit attem
 | 80 | http | Apache 2.2.8 | Outdated |
 | 3306 / 5432 | mysql / postgresql | — | Multiple known exploits per Searchsploit, not tested here |
 
-Root-level code execution was achieved via the vsftpd backdoor, confirming the service is exploitable as flagged.
+Root-level code execution was achieved via the vsftpd backdoor, confirming the service is exploitable as flagged
+
+
+## Traffic analysis: SYN scan vs. connect scan
+
+Captured both scan types in Wireshark against the same port(s) on the
+target to see the difference at the packet level, not just in Nmap's
+output.
+
+**SYN scan (`-sS`):**
+Kali sent a SYN, the target replied SYN/ACK, and Kali responded with a
+RST instead of completing the handshake. The connection never fully
+opens, which is why this is called a "half-open" scan.
+
+**Connect scan (`-sT`):**
+The full three-way handshake completed: SYN, then SYN/ACK, then an ACK
+from Kali. The connection was then properly closed afterward.
+
+**What i learned** the SYN scan gets the same information (open vs.
+closed) without ever completing the handshake, so it's less likely to be
+logged at the application layer and doesn't leave a full connection in
+the target's logs. The connect scan completes the handshake like a real
+client would, which is noisier but doesn't need raw-socket privileges the
+way `-sS` does.
 
 ##  Lessons learned
 
